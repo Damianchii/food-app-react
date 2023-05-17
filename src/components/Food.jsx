@@ -1,9 +1,19 @@
 import React, { useState } from "react"
 import { data } from "../data/data.js"
+import { Modal } from "../components/Modal.jsx"
 
 export const Food = () => {
 	const [foods, setFoods] = useState(data)
 
+	//Modal
+	const [modal, setModal] = useState(false)
+	const toggleModal = () => setModal(!modal)
+
+	if (modal) {
+		document.body.classList.add("overflow-y-hidden", "pr-[21px]")
+	} else {
+		document.body.classList.remove("overflow-y-hidden", "pr-[21px]")
+	}
 	//Filter Type
 	const filterType = category => {
 		setFoods(
@@ -21,6 +31,7 @@ export const Food = () => {
 			})
 		)
 	}
+
 	return (
 		<div className='max-w-[1640px] m-auto px-4 py-12'>
 			<h1 className='text-orange-600 text-4xl text-center'>
@@ -64,6 +75,11 @@ export const Food = () => {
 					<p className='font-bold text-gray-700'>Filter Price</p>
 					<div className='flex justify-between max-w-[390px] w-full'>
 						<button
+							onClick={() => setFoods(data)}
+							className='border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white m-1'>
+							All
+						</button>
+						<button
 							onClick={() => filterPrice("$")}
 							className='border-orange-600 text-orange-600 hover:bg-orange-600 hover:text-white m-1'>
 							$
@@ -89,10 +105,12 @@ export const Food = () => {
 
 			{/*Display food*/}
 			<div className='grid grid-cols-2 lg:grid-cols-4 gap-6 pt-4 '>
+				<Modal toggleModal={toggleModal} modal={modal} />
 				{foods.map((item, index) => (
 					<div
+						onClick={toggleModal}
 						key={index}
-						className='border rounded-lg shadow-lg hover:scale-105 duration-300'>
+						className='border rounded-lg shadow-lg duration-300 cursor-pointer hover:shadow-2xl}'>
 						<img
 							src={item.image}
 							alt={item.name}
